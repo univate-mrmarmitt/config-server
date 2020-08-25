@@ -19,5 +19,5 @@ jobs:
       with:
         java-version: 11
       
-    - name: Testing app            
-      run: mvn clean test 
+    - name: Install app            
+      run: mvn -U clean install 
