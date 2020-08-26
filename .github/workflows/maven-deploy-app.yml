@@ -1,14 +1,13 @@
-name: maven install app
+name: maven deploy app
 
 on:
   push:
-    branches:
-      - develop
-      - feature/*
+    branches: 
+      - master
 
 jobs:
   test:
-    name: Running units tests
+    name: Deploying to heroku server
     runs-on: ubuntu-latest
 
     steps:
@@ -24,5 +23,14 @@ jobs:
       with:
         repositories: '[{ "id": "oss.sonatype.org-snapshot", "name": "central-snapshot", "url": "https://oss.sonatype.org/content/repositories/snapshots", "release": {"enable": "true"}, "snapshot": {"enable": "true"} }]'
         
-    - name: Install app            
-      run: mvn -U clean install 
+    - name: Building maven app
+      run: mvn -B package --file pom.xml
+
+    - name: deploying to heroku server
+      uses: akhileshns/heroku-deploy@v3.4.6
+      with:
+        heroku_api_key: ${ secret.HEROKU_API_KEY }
+        heroku_api_name: "skalowsky-config-server"
+        heroku_email: ${ secret.HEROKU_EMAIL }
+        usedocker: true
+        branch: master
