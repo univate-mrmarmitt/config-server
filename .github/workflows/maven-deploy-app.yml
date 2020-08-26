@@ -29,8 +29,8 @@ jobs:
     - name: deploying to heroku server
       uses: akhileshns/heroku-deploy@v3.4.6
       with:
-        heroku_api_key: ${ secret.HEROKU_API_KEY }
+        heroku_api_key: ${ secrets.HEROKU_API_KEY }
         heroku_api_name: "skalowsky-config-server"
-        heroku_email: ${ secret.HEROKU_EMAIL }
+        heroku_email: ${ secrets.HEROKU_EMAIL }
         usedocker: true
         branch: master
