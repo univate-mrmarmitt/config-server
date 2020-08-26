@@ -12,5 +12,3 @@ spring:
           uri: ${GIT_URL}
           timeout: 120
           clone-on-start: true
-          username: ${GIT_USERNAME}
-          password: ${GIT_PASSWORD}

@@ -1,0 +1,36 @@
+name: maven deploy app
+
+on:
+  push:
+    branches: 
+      - master
+
+jobs:
+  test:
+    name: Deploying to heroku server
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v2
+
+    - name: Set up JDK 11
+      uses: actions/setup-java@v1
+      with:
+        java-version: 11
+
+    - name: Set up .m2/settings.xml action
+      uses: whelk-io/maven-settings-xml-action@v11
+      with:
+        repositories: '[{ "id": "oss.sonatype.org-snapshot", "name": "central-snapshot", "url": "https://oss.sonatype.org/content/repositories/snapshots", "release": {"enable": "true"}, "snapshot": {"enable": "true"} }]'
+        
+    - name: Building maven app
+      run: mvn -B package --file pom.xml
+
+    - name: deploying to heroku server
+      uses: akhileshns/heroku-deploy@v3.4.6
+      with:
+        heroku_api_key: ${ secret.HEROKU_API_KEY }
+        heroku_api_name: "skalowsky-config-server"
+        heroku_email: ${ secret.HEROKU_EMAIL }
+        usedocker: true
+        branch: master
